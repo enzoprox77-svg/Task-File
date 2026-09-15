@@ -54,9 +54,34 @@
 <nav class="mobile-tabs" id="mobile-nav" aria-label="Navegación móvil"></nav>
 <div id="overlay-root"></div><div id="popover-root"></div><div id="toast-root" role="status" aria-live="polite"></div>
 <input id="backup-input" class="sr-only" type="file" accept="application/json,.json" tabindex="-1" aria-label="Seleccionar respaldo JSON">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
 'use strict';
+
+const SUPABASE_URL = 'https://jjlitxapwvmhwyeujayb.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_HgfAPKvOvIAazIncUwLuzw_metDYL7h';
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+ );
 /* 02 · Iconos originales */
+ async function loginSupabase() {
+  const email = prompt('Correo de Task Files:');
+  const password = prompt('Contraseña:');
+
+  const { error } = await supabaseClient.auth.signInWithPassword({
+    email,
+    password
+  });
+
+  if (error) {
+    alert('No se pudo iniciar sesión: ' + error.message);
+    return false;
+  }
+
+  return true;
+}
 const paths={home:'<path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1Z"/>',tasks:'<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/>',calendar:'<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M7 3v4M17 3v4M3 10h18M7 14h2M13 14h2M7 17h2"/>',dynamic:'<circle cx="9" cy="8" r="3"/><path d="M3 20v-2a6 6 0 0 1 12 0v2M16 5a3 3 0 0 1 0 6M18 15a5 5 0 0 1 3 5"/>',search:'<circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/>',bell:'<path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/>',chevron:'<path d="m8 10 4 4 4-4"/>',arrow:'<path d="M4 12h16m-7-7 7 7-7 7"/>',left:'<path d="m14 6-6 6 6 6"/>',right:'<path d="m10 6 6 6-6 6"/>',clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',check:'<path d="m5 12 4 4L19 6"/>',checkCircle:'<circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/>',shield:'<path d="m12 3 8 3v6c0 5-8 9-8 9s-8-4-8-9V6Z"/><path d="m8 12 3 3 5-6"/>',image:'<rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8" cy="8" r="1.5"/><path d="m3 17 5-5 4 4 4-6 5 7"/>',edit:'<path d="m14 5 5 5M4 20l5-1L21 7a2 2 0 0 0-5-5L4 14Z"/>',plus:'<path d="M12 5v14M5 12h14"/>',pin:'<path d="M19 10c0 5-7 11-7 11S5 15 5 10a7 7 0 1 1 14 0Z"/><circle cx="12" cy="10" r="2"/>',more:'<circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/>',list:'<path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/>',board:'<rect x="3" y="4" width="7" height="16" rx="2"/><rect x="14" y="4" width="7" height="11" rx="2"/>',sort:'<path d="M5 5v14m-3-3 3 3 3-3M12 6h9M12 12h6M12 18h3"/>',filter:'<path d="M4 7h16M7 12h10M10 17h4"/>',close:'<path d="m6 6 12 12M6 18 18 6"/>',copy:'<rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/>',trash:'<path d="M3 6h18M9 6V3h6v3M5 6l1 15h12l1-15M10 10v7M14 10v7"/>',download:'<path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"/>',upload:'<path d="M12 16V3m-5 5 5-5 5 5M4 16v5h16v-5"/>',lock:'<rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3M12 14v3"/>',repeat:'<path d="M4 11V7h14l-3-3M20 13v4H6l3 3M18 7l-3 3M6 17l3-3"/>',spark:'<path d="m12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5Z"/>',info:'<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7h.01"/>',camera:'<path d="M8 6 9 3h6l1 3h5v15H3V6Z"/><circle cx="12" cy="13" r="4"/>',flag:'<path d="M5 21V3m0 1c5-4 9 4 14 0v10c-5 4-9-4-14 0"/>',undo:'<path d="m8 4-5 5 5 5M3 9h10a7 7 0 0 1 0 14"/>',sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2m-17-9 1.5 1.5M18.5 18.5 20 20M4 20l1.5-1.5M18.5 5.5 20 4"/>'};
 const icon=(name,cls='')=>`<svg class="${cls}" viewBox="0 0 24 24" aria-hidden="true">${paths[name]||paths.tasks}</svg>`;
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -108,10 +133,58 @@ function sampleData(){
 }
 let storageError='',storageBlocked=false;
 let data;
-try{const saved=localStorage.getItem(STORAGE_KEY);data=saved?validateBackup(JSON.parse(saved)):sampleData();if(!saved)localStorage.setItem(STORAGE_KEY,JSON.stringify(data))}catch(error){data={version:1,prefs:{reminders:false,coverUrl:''},items:[]};storageError='No pudimos leer los datos guardados. Puedes importar un respaldo. Los datos originales no se han sobrescrito.';storageBlocked=true}
-function save(){
- data.updatedAt=new Date().toISOString();
- try{if(storageBlocked)throw Error('storage-blocked');localStorage.setItem(STORAGE_KEY,JSON.stringify(data));storageError='';return true}catch{storageError='No se pudo guardar en este navegador. Exporta un respaldo antes de cerrar.';return false}
+try {
+  const saved = localStorage.getItem(STORAGE_KEY);
+  data = saved ? validateBackup(JSON.parse(saved)) : sampleData();
+} catch {
+  data = sampleData();
+}
+
+async function saveToCloud() {
+  try {
+    const { data: { user } } = await supabaseClient.auth.getUser();
+    if (!user) return;
+
+    const { data: existing } = await supabaseClient
+      .from('app_data')
+      .select('id')
+      .eq('user_id', user.id)
+      .maybeSingle();
+
+    if (existing) {
+      await supabaseClient
+        .from('app_data')
+        .update({
+          data: data,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', existing.id);
+    } else {
+      await supabaseClient
+        .from('app_data')
+        .insert({
+          user_id: user.id,
+          data: data,
+          updated_at: new Date().toISOString()
+        });
+    }
+  } catch (error) {
+    console.error('Error guardando en la nube:', error);
+  }
+}
+
+function save() {
+  data.updatedAt = new Date().toISOString();
+
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    saveToCloud();
+    storageError = '';
+    return true;
+  } catch {
+    storageError = 'No se pudo guardar.';
+    return false;
+  }
 }
 function commit(message){const ok=save();render();if(message)toast(ok?message:storageError,ok?'checkCircle':'info',ok?null:{label:'Exportar',fn:exportBackup});return ok}
 function occurrence(item,origin){const o=item.overrides?.[origin]||{};return {...item,origin,date:o.date||origin,done:typeof o.done==='boolean'?o.done:(item.repeat==='none'?item.done:false),key:item.id+'~'+origin}}
@@ -361,7 +434,41 @@ window.addEventListener('beforeunload',e=>{if(formDirty||storageError){e.prevent
 let lastDay=today();setInterval(()=>{if(today()!==lastDay){lastDay=today();render()}checkReminders()},15000);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden){if(today()!==lastDay){lastDay=today();render()}checkReminders()}});
 const navItems=[['home','home','Inicio'],['tasks','tasks','Tareas'],['calendar','calendar','Calendario'],['dynamics','dynamic','Dinámicas']];
-render();checkReminders();
+async function initApp() {
+  let { data: { session } } = await supabaseClient.auth.getSession();
+
+  if (!session) {
+    const ok = await loginSupabase();
+    if (!ok) {
+      render();
+      checkReminders();
+      return;
+    }
+
+    const result = await supabaseClient.auth.getSession();
+    session = result.data.session;
+  }
+
+  const user = session.user;
+
+  const { data: cloudData, error } = await supabaseClient
+    .from('app_data')
+    .select('data')
+    .eq('user_id', user.id)
+    .maybeSingle();
+
+  if (!error && cloudData?.data) {
+    data = validateBackup(cloudData.data);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  } else if (!cloudData) {
+    await saveToCloud();
+  }
+
+  render();
+  checkReminders();
+}
+
+initApp();
 
 </script>
 </body>
